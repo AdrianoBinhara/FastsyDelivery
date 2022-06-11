@@ -21,7 +21,7 @@ class _FadeInWidgetState extends State<FadeInWidget> with TickerProviderStateMix
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 500),
     );
     _animation = Tween(
       begin: 0.0,
@@ -41,6 +41,55 @@ class _FadeInWidgetState extends State<FadeInWidget> with TickerProviderStateMix
     return FadeTransition(
       opacity: _animation,
       child: widget.child,
+    );
+  }
+}
+
+class TranslationWidget extends StatefulWidget {
+  final Widget child;
+
+  const TranslationWidget({Key? key, required this.child}) : super(key: key);
+
+  @override
+  State<TranslationWidget> createState() => _TranslationWidgetState();
+}
+
+class _TranslationWidgetState extends State<TranslationWidget> with TickerProviderStateMixin {
+  late AnimationController _controller;
+
+  late Animation<double> translationAnimation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    translationAnimation = Tween(
+      begin: 0.0,
+      end: -87.0,
+    ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.bounceOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _controller.forward(from: 0.0);
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(translationAnimation.value, 0.0),
+          child: widget.child,
+        );
+      },
     );
   }
 }
@@ -112,32 +161,37 @@ class _OnboardingPageState extends State<OnboardingPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 40),
                 child: isLastPage
-                    ? FadeInWidget(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              width: 154,
-                              child: TextButton(
-                                onPressed: () {
-                                  _pageController.previousPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.ease,
-                                  );
-                                },
-                                style: TextButton.styleFrom(),
-                                child: Text(
-                                  "Back",
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      fontWeight: FontWeight.w700, color: Color(0xff000000)),
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TranslationWidget(
+                            child: Transform.translate(
+                              offset: Offset(87.0, 0.0),
+                              child: SizedBox(
+                                height: 60,
+                                width: 154,
+                                child: TextButton(
+                                  onPressed: () {
+                                    _pageController.previousPage(
+                                      duration: const Duration(milliseconds: 300),
+                                      curve: Curves.ease,
+                                    );
+                                  },
+                                  style: TextButton.styleFrom(),
+                                  child: Text(
+                                    "Back",
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                        fontWeight: FontWeight.w700, color: Color(0xff000000)),
+                                  ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            SizedBox(
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          FadeInWidget(
+                            child: SizedBox(
                               height: 60,
                               width: 154,
                               child: OutlinedButton(
@@ -159,8 +213,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                         fontWeight: FontWeight.w700, color: Color(0xffFFFFFF)),
                                   )),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       )
                     : isFirstPage
                         ? Container()
