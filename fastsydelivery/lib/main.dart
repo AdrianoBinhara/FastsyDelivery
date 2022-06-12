@@ -1,5 +1,6 @@
 import 'package:fastsydelivery/pages/onboarding/onboarding_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fastsydelivery/routes/route.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: OnboardingPage(),
+      onGenerateRoute: RouteGenerator.generateRoute,
+      initialRoute: "onboarding",
+      home: const OnboardingPage(),
     );
   }
 }

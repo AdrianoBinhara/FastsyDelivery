@@ -1,98 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class FadeInWidget extends StatefulWidget {
-  final Widget child;
-
-  FadeInWidget({required this.child});
-
-  @override
-  State<FadeInWidget> createState() => _FadeInWidgetState();
-}
-
-class _FadeInWidgetState extends State<FadeInWidget> with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-    _animation = Tween(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _controller.forward(from: 0.0);
-    return FadeTransition(
-      opacity: _animation,
-      child: widget.child,
-    );
-  }
-}
-
-class TranslationWidget extends StatefulWidget {
-  final Widget child;
-
-  const TranslationWidget({Key? key, required this.child}) : super(key: key);
-
-  @override
-  State<TranslationWidget> createState() => _TranslationWidgetState();
-}
-
-class _TranslationWidgetState extends State<TranslationWidget> with TickerProviderStateMixin {
-  late AnimationController _controller;
-
-  late Animation<double> translationAnimation;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-    translationAnimation = Tween(
-      begin: 0.0,
-      end: -87.0,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.bounceOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _controller.forward(from: 0.0);
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(translationAnimation.value, 0.0),
-          child: widget.child,
-        );
-      },
-    );
-  }
-}
+import '../../models/OnboardModel.dart';
+import '../../widgets/backButton_widget.dart';
+import '../../widgets/fadein_widget.dart';
+import '../../widgets/fadeout_widget.dart';
+import '../../widgets/nextButton_widget.dart';
+import '../../widgets/onboarding_widget.dart';
+import '../../widgets/translationRigt_widget.dart';
+import '../../widgets/translationLeft_widget.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -105,6 +24,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   late PageController _pageController;
   bool isLastPage = false;
   bool isFirstPage = true;
+  int previousPage = 0;
 
   @override
   void initState() {
@@ -114,8 +34,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -133,11 +53,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     setState(() {
                       isLastPage = index == 2;
                       isFirstPage = index == 0;
+                      previousPage = _pageController.position.userScrollDirection ==
+                                  ScrollDirection.forward ||
+                              _pageController.position.userScrollDirection == ScrollDirection.idle
+                          ? 1
+                          : 0;
                     });
                   },
                   itemCount: demo_data.length,
                   controller: _pageController,
-                  itemBuilder: (context, index) => OnboardignComponent(
+                  itemBuilder: (context, index) => Onboardign_widget(
                     image: demo_data[index].image,
                     title: demo_data[index].title,
                     description: demo_data[index].description,
@@ -164,159 +89,58 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TranslationWidget(
+                          TranslationLeftWidget(
                             child: Transform.translate(
                               offset: Offset(87.0, 0.0),
-                              child: SizedBox(
-                                height: 60,
-                                width: 154,
-                                child: TextButton(
-                                  onPressed: () {
-                                    _pageController.previousPage(
-                                      duration: const Duration(milliseconds: 300),
-                                      curve: Curves.ease,
-                                    );
-                                  },
-                                  style: TextButton.styleFrom(),
-                                  child: Text(
-                                    "Back",
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                        fontWeight: FontWeight.w700, color: Color(0xff000000)),
-                                  ),
-                                ),
-                              ),
+                              child: backButton_widget(context, _pageController),
                             ),
                           ),
                           SizedBox(
                             width: 20,
                           ),
                           FadeInWidget(
-                            child: SizedBox(
-                              height: 60,
-                              width: 154,
-                              child: OutlinedButton(
-                                  onPressed: () {
-                                    _pageController.nextPage(
-                                      duration: const Duration(milliseconds: 300),
-                                      curve: Curves.ease,
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Color(0xff04764E),
-                                    shape: new RoundedRectangleBorder(
-                                      borderRadius: new BorderRadius.circular(12.0),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    "Next",
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                        fontWeight: FontWeight.w700, color: Color(0xffFFFFFF)),
-                                  )),
+                            child: nextButton_widget(
+                              isEnabled: true,
+                              label: "Next",
                             ),
                           ),
                         ],
                       )
                     : isFirstPage
                         ? Container()
-                        : FadeInWidget(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 60,
-                                  width: 154,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      _pageController.previousPage(
-                                        duration: const Duration(milliseconds: 300),
-                                        curve: Curves.ease,
-                                      );
-                                    },
-                                    style: TextButton.styleFrom(),
-                                    child: Text(
-                                      "Back",
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                          fontWeight: FontWeight.w700, color: Color(0xff000000)),
+                        : previousPage == 1
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TranslationRightWidget(
+                                    child: Transform.translate(
+                                      offset: Offset(87.0, 0.0),
+                                      child: backButton_widget(context, _pageController),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  FadeOutWidget(
+                                    child: nextButton_widget(
+                                      isEnabled: false,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FadeInWidget(
+                                    child: backButton_widget(context, _pageController),
+                                  ),
+                                ],
+                              ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class Onboard {
-  final String image, title, description;
-
-  Onboard({
-    required this.image,
-    required this.title,
-    required this.description,
-  });
-}
-
-final List<Onboard> demo_data = [
-  Onboard(
-    image: "assets/images/map.png",
-    title: "Come visit our\n stores",
-    description: "Lorem ipsum dolor sit amet,\n consectetur adipiscing elit",
-  ),
-  Onboard(
-    image: "assets/images/map.png",
-    title: "Come visit our\n stores",
-    description: "Lorem ipsum dolor sit amet,\n consectetur adipiscing elit",
-  ),
-  Onboard(
-    image: "assets/images/map.png",
-    title: "Come visit our\n stores",
-    description: "Lorem ipsum dolor sit amet,\n consectetur adipiscing elit",
-  ),
-];
-
-class OnboardignComponent extends StatelessWidget {
-  const OnboardignComponent({
-    Key? key,
-    required this.image,
-    required this.title,
-    required this.description,
-  }) : super(key: key);
-
-  final String image, title, description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          image,
-          height: 250,
-        ),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline5!.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          description,
-          style: TextStyle(
-            color: Color(0xffA3A3A3),
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
     );
   }
 }
