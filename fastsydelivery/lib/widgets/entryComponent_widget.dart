@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EntryComponent extends StatefulWidget {
-  EntryComponent({Key? key, required this.text, required this.hintText}) : super(key: key);
+  EntryComponent({Key? key, required this.text, required this.icon, required this.hintText})
+      : super(key: key);
   final String text;
   final String hintText;
-
+  final Widget icon;
   @override
   State<EntryComponent> createState() => _EntryComponentState();
 }
@@ -51,7 +52,7 @@ class _EntryComponentState extends State<EntryComponent> {
                 onPressed: () {
                   _textController.clear();
                 },
-                icon: const Icon(Icons.clear),
+                icon: widget.icon,
               ),
             ),
           )

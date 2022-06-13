@@ -2,6 +2,8 @@ import 'package:fastsydelivery/widgets/descriptionText_widget.dart';
 import 'package:fastsydelivery/widgets/entryComponent_widget.dart';
 import 'package:fastsydelivery/widgets/iconButton_widget.dart';
 import 'package:fastsydelivery/widgets/nextButton_widget.dart';
+import 'package:fastsydelivery/routes/route.dart' as route;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../widgets/titleText_widget.dart';
@@ -50,7 +52,11 @@ class LoginEmailPage extends StatelessWidget {
               SizedBox(
                 height: 86,
                 width: double.infinity,
-                child: EntryComponent(text: "Email", hintText: "your email"),
+                child: EntryComponent(
+                  text: "Email",
+                  hintText: "your email",
+                  icon: const Icon(Icons.clear),
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -58,7 +64,11 @@ class LoginEmailPage extends StatelessWidget {
               SizedBox(
                 height: 86,
                 width: double.infinity,
-                child: EntryComponent(text: "Password", hintText: "your password"),
+                child: EntryComponent(
+                  text: "Password",
+                  hintText: "your password",
+                  icon: const Icon(Icons.remove_red_eye),
+                ),
               ),
               const SizedBox(
                 height: 30,
@@ -77,7 +87,7 @@ class LoginEmailPage extends StatelessWidget {
                       margin: const EdgeInsets.only(top: 0.0),
                       child: const DescriptionText_widget(description: "Forgot password?")),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.pushNamed(context, route.forgotPassPage),
                     child: Text(
                       "Reset here",
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
