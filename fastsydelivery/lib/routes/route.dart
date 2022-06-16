@@ -2,6 +2,7 @@ import 'package:fastsydelivery/pages/login/forgotPass_page.dart';
 import 'package:fastsydelivery/pages/login/loginEmail_page.dart';
 import 'package:fastsydelivery/pages/login/login_page.dart';
 import 'package:fastsydelivery/pages/onboarding/onboarding_page.dart';
+import 'package:fastsydelivery/pages/signup/signup_page.dart';
 import 'package:fastsydelivery/widgets/entryComponent_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ const String onboardingPage = 'onboarding';
 const String loginEmailPage = 'loginEmail';
 const String forgotPassPage = 'forgotPass';
 const String verificationEmailPage = 'verificationEmailPage';
+const String signUpPage = 'signUpPage';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,6 +32,9 @@ class RouteGenerator {
 
       case verificationEmailPage:
         return MaterialPageRoute(builder: (context) => const VerficationEmailPage());
+
+      case signUpPage:
+        return MaterialPageRoute(builder: (context) => const SignUpPage());
 
       default:
         throw Exception('A rota ${settings.name} não existe!');

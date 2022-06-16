@@ -110,6 +110,7 @@ class LoginEmailPage extends StatelessWidget {
                         height: 60,
                         width: double.infinity,
                         child: ButtonWithIcon(
+                          route: route.signUpPage,
                           color: 0xffA3A3A3,
                           text: "Create an account",
                         ),

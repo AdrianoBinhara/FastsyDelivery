@@ -4,15 +4,17 @@ class ButtonWithIcon extends StatelessWidget {
   final IconData? icon;
   final String text;
   final int color;
-
-  const ButtonWithIcon({Key? key, this.icon, this.text = "", required this.color})
+  final String route;
+  const ButtonWithIcon({Key? key, this.icon, this.text = "", required this.color, this.route = ""})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return icon != null
         ? OutlinedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, route);
+            },
             icon: Icon(
               icon,
               color: Colors.white,
@@ -29,7 +31,9 @@ class ButtonWithIcon extends StatelessWidget {
             ),
           )
         : OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, route);
+            },
             child: Text(
               text,
               style: const TextStyle(color: Colors.white),
