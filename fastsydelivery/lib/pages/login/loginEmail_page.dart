@@ -1,7 +1,6 @@
 import 'package:fastsydelivery/widgets/descriptionText_widget.dart';
 import 'package:fastsydelivery/widgets/entryComponent_widget.dart';
 import 'package:fastsydelivery/widgets/iconButton_widget.dart';
-import 'package:fastsydelivery/widgets/nextButton_widget.dart';
 import 'package:fastsydelivery/routes/route.dart' as route;
 
 import 'package:flutter/material.dart';
@@ -77,6 +76,7 @@ class LoginEmailPage extends StatelessWidget {
                 height: 60,
                 width: double.infinity,
                 child: ButtonWithIcon(
+                  route: route.homePage,
                   color: 0xff04764E,
                   text: "Login ",
                 ),

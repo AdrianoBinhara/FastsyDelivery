@@ -33,6 +33,9 @@ dependencies:
   flutter_native_splash: ^2.0.0
   flutter_signin_button: ^2.0.0
   flutter_svg: ^1.0.0
+  lottie: ^1.3.0
+  font_awesome_flutter: ^9.0.0
+  badges: ^2.0.3
 
 flutter_native_splash:
   android: true
@@ -72,6 +75,8 @@ flutter:
     - assets/images/map.png
     - assets/images/Fastsy.png 
     - assets/images/Vectorchevron.svg
+    - assets/json/done.json
+    
      # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
