@@ -35,29 +35,29 @@ class DrawerPage extends StatelessWidget {
               children: DrawerItems.all
                   .map(
                     (element) => ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                       onTap: () => onSelectedItem(element),
-                      leading: Icon(element.icon, color: Color(0xFF04764E)),
+                      leading: Icon(element.icon, color: const Color(0xFF04764E)),
                       title: Text(
                         element.title,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ),
                   )
                   .toList(),
             ),
-            SizedBox(),
+            const SizedBox(),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, bottom: 40),
               child: Row(
                 children: [
-                  RotatedBox(
+                  const RotatedBox(
                       quarterTurns: 2,
                       child: Icon(Icons.logout_outlined, color: Color(0xFF04764E))),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
-                  Text(
+                  const Text(
                     'Log-Out',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   )

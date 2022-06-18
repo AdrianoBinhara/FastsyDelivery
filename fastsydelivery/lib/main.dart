@@ -5,6 +5,7 @@ import 'package:fastsydelivery/pages/home/homeBody_page.dart';
 import 'package:fastsydelivery/pages/onboarding/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fastsydelivery/routes/route.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -25,7 +26,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  DrawerItem item = DrawerItems.favorites;
+  DrawerItem item = DrawerItems.home;
   double xOffset = 0;
   double yOffset = 0;
   double scaleFactor = 1;
@@ -115,15 +116,79 @@ class _MyAppState extends State<MyApp> {
   Widget getDrawerPage() {
     switch (item) {
       case DrawerItems.home:
-        return HomeBodyPage(
-            onClicked: openDrawer, icon: isDrawerOpen ? Icons.arrow_back_ios_rounded : Icons.menu);
+        return Scaffold(
+          bottomNavigationBar: bottonNavigationBar(),
+          body: HomeBodyPage(
+              onClicked: openDrawer,
+              icon: isDrawerOpen ? Icons.arrow_back_ios_rounded : Icons.menu),
+        );
 
       case DrawerItems.favorites:
-        return FavoritePage(onClicked: openDrawer);
+        return Scaffold(
+          bottomNavigationBar: bottonNavigationBar(),
+          body: FavoritePage(onClicked: openDrawer),
+        );
 
       default:
-        return HomeBodyPage(
-            onClicked: openDrawer, icon: isDrawerOpen ? Icons.arrow_back_ios_rounded : Icons.menu);
+        return Scaffold(
+          bottomNavigationBar: bottonNavigationBar(),
+          body: HomeBodyPage(
+              onClicked: openDrawer,
+              icon: isDrawerOpen ? Icons.arrow_back_ios_rounded : Icons.menu),
+        );
     }
+  }
+}
+
+class bottonNavigationBar extends StatelessWidget {
+  const bottonNavigationBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: GNav(
+            backgroundColor: const Color(0xFF04764E),
+            activeColor: Colors.white,
+            color: Colors.white.withOpacity(0.7),
+            tabBackgroundColor: Colors.white.withOpacity(0.15),
+            gap: 5,
+            tabMargin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            tabBorderRadius: 20,
+            tabs: [
+              GButton(
+                icon: Icons.home_outlined,
+                text: 'Home',
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              GButton(
+                icon: Icons.favorite_outline,
+                text: 'Favorites',
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              GButton(
+                icon: Icons.notifications_outlined,
+                text: 'News',
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              GButton(
+                icon: Icons.person_outlined,
+                text: 'Profile',
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
