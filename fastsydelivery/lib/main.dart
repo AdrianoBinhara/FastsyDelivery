@@ -59,6 +59,26 @@ class _MyAppState extends State<MyApp> {
               closeDrawer();
             },
           ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.fastLinearToSlowEaseIn,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 100,
+                  spreadRadius: 100,
+                  color: Colors.black.withOpacity(0.1),
+                )
+              ],
+              color: Color(0xFF023B27),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            transform: Matrix4.translationValues(xOffset - 40, yOffset + 50, 0)
+              ..scale(
+                scaleFactor - 0.1,
+              )
+              ..rotateY(isDrawerOpen ? -0.5 : 0.0),
+          ),
           WillPopScope(
             onWillPop: () async {
               if (isDrawerOpen) {
@@ -104,10 +124,14 @@ class _MyAppState extends State<MyApp> {
                   borderRadius: BorderRadius.circular(isDrawerOpen ? 20 : 0),
                   color: Colors.white,
                 ),
-                child: AbsorbPointer(absorbing: isDrawerOpen, child: getDrawerPage()),
+                child: AbsorbPointer(
+                    absorbing: isDrawerOpen,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(isDrawerOpen ? 20 : 0),
+                        child: getDrawerPage())),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -131,10 +155,13 @@ class _MyAppState extends State<MyApp> {
 
       default:
         return Scaffold(
+          backgroundColor: Colors.white,
           bottomNavigationBar: bottonNavigationBar(),
-          body: HomeBodyPage(
-              onClicked: openDrawer,
-              icon: isDrawerOpen ? Icons.arrow_back_ios_rounded : Icons.menu),
+          body: Container(
+            child: HomeBodyPage(
+                onClicked: openDrawer,
+                icon: isDrawerOpen ? Icons.arrow_back_ios_rounded : Icons.menu),
+          ),
         );
     }
   }
